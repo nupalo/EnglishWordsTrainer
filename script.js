@@ -21,14 +21,14 @@ shuffle(dictionary);
 
 window.addEventListener("load", function () {
     const limitQuestions = 5;
-    let currentQuestion = 1;
+    let currentQuestion = 0;
+    let currentLetter = 0;
 
     let answerContainer = document.querySelector("#answer");
     let letters = document.querySelector("#letters");
     let currentQuestionElem = document.querySelector("#current_question");
     let totalQuestionsElem = document.querySelector("#total_questions");
 
-    currentQuestionElem.innerHTML = currentQuestion;
     totalQuestionsElem.innerHTML = limitQuestions;
 
     // функция для показа слова, разбитого на буквы в кнопках
@@ -44,10 +44,50 @@ window.addEventListener("load", function () {
 
             letters.appendChild(btn);
 		}
+
+        currentQuestionElem.innerHTML = currentQuestion + 1;
+        answerContainer.innerHTML = "";
 	};
 
     displayCurrentQuestion();
 
+    letters.addEventListener("click", function (event) {
+        if (event.target.tagName === "BUTTON") {
+            let btn = event.target;
+            let word = dictionary[currentQuestion];
+
+            // если текст на кнопке совпадает с буквой (текущей) в текущем слове
+            if (btn.innerHTML === word[currentLetter]) {
+            	btn.classList.remove("btn-primary");
+            	btn.classList.add("btn-success");
+            	answerContainer.appendChild(btn);
+
+            	// если выбрали правильную букву, то теперь ждём следующую
+            	currentLetter++;
+
+            	// если дошли до последней буквы, то переходим к следующему заданию
+            	if (currentLetter >= word.length) {
+            		currentLetter = 0;
+            		currentQuestion++;
+
+            		// если мы дошли до последнего вопроса
+            		if (currentQuestion >= limitQuestions) {
+            			letters.innerHTML = "<div class='alert alert-success'>Вы успешно справились со всеми заданиями!</div>";
+					} else {
+                        displayCurrentQuestion();
+					}
+				}
+			} else {
+                btn.classList.remove("btn-primary");
+                btn.classList.add("btn-danger");
+
+                setTimeout(() => {
+                	btn.classList.remove("btn-danger")
+                    btn.classList.add("btn-primary")
+                }, 300);
+			}
+        }
+    });
 });
 
 
