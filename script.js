@@ -82,8 +82,8 @@ window.addEventListener("load", function () {
                 btn.classList.add("btn-danger");
 
                 setTimeout(() => {
-                	btn.classList.remove("btn-danger")
-                    btn.classList.add("btn-primary")
+                	btn.classList.remove("btn-danger");
+                    btn.classList.add("btn-primary");
                 }, 300);
 			}
         }
